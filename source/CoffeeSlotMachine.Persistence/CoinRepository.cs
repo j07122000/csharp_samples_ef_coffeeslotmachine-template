@@ -10,7 +10,7 @@ namespace CoffeeSlotMachine.Persistence
         private readonly ApplicationDbContext _dbContext;
 
         public CoinRepository(ApplicationDbContext dbContext)
-        {
+        { 
             _dbContext = dbContext;
         }
 
