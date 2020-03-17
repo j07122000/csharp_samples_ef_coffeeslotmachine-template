@@ -14,5 +14,20 @@ namespace CoffeeSlotMachine.Persistence
             _dbContext = dbContext;
         }
 
+        public IEnumerable<Coin> GetAll()
+        {
+            return _dbContext.Coins;
+        }
+        public void AddCoins(Coin[] coins)
+        {
+            throw new System.NotImplementedException();
+        }
+
+     
+
+        public void RemoveCoins(Coin[] coins)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
