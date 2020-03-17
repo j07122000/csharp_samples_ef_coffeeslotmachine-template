@@ -14,5 +14,9 @@ namespace CoffeeSlotMachine.Persistence
         {
             _dbContext = dbContext;
         }
+       public IEnumerable<Product> GetAll()
+        {
+            return _dbContext.Products.ToArray();
+        }
     }
 }

@@ -19,7 +19,6 @@ namespace CoffeeSlotMachine.Core.Logic
         public OrderController()
         {
             _dbContext = new ApplicationDbContext();
-
             _coinRepository = new CoinRepository(_dbContext);
             _orderRepository = new OrderRepository(_dbContext);
             _productRepository = new ProductRepository(_dbContext);
@@ -32,6 +31,9 @@ namespace CoffeeSlotMachine.Core.Logic
         /// <returns></returns>
         public IEnumerable<Product> GetProducts()
         {
+          
+           return _dbContext.Products;
+               
             throw new NotImplementedException();
         }
 
@@ -80,7 +82,8 @@ namespace CoffeeSlotMachine.Core.Logic
         /// <returns></returns>
         public IEnumerable<Order> GetAllOrdersWithProduct()
         {
-            throw new NotImplementedException();
+            
+        //    return _dbContext.
         }
 
         /// <summary>

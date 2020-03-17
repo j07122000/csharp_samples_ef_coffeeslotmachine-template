@@ -55,7 +55,21 @@ namespace CoffeeSlotMachine.Core.Entities
         /// <returns>isFinished ist true, wenn der Produktpreis zumindest erreicht wurde</returns>
         public bool InsertCoin(int coinValue)
         {
-            throw new NotImplementedException();
+            if (ThrownInCoinValues == null)
+            {
+                ThrownInCoinValues += coinValue;
+            }
+            else
+            {
+                ThrownInCoinValues += ";" + coinValue;
+            }
+            if (Product.PriceInCents <= ThrownInCents)
+            {
+                return true;
+
+            }
+
+            return false;
         }
 
         /// <summary>
