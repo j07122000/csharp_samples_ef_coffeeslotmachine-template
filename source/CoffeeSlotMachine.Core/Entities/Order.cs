@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace CoffeeSlotMachine.Core.Entities
 {
@@ -29,12 +30,12 @@ namespace CoffeeSlotMachine.Core.Entities
         /// <summary>
         /// Summe der eingeworfenen Cents.
         /// </summary>
-        public int ThrownInCents => -1;
+        public int ThrownInCents => ThrownInCoinValues.Split(";").Sum(c => Convert.ToInt32(c));
 
         /// <summary>
         /// Summe der Cents die zurückgegeben werden
         /// </summary>
-        public int ReturnCents => -1;
+        public int ReturnCents => ReturnCoinValues.Split(";").Sum(c => Convert.ToInt32(c));
 
 
         public int ProductId { get; set; }
@@ -46,7 +47,7 @@ namespace CoffeeSlotMachine.Core.Entities
         /// Kann der Automat mangels Kleingeld nicht
         /// mehr herausgeben, wird der Rest als Spende verbucht
         /// </summary>
-        public int DonationCents => -1;
+        public int DonationCents => ThrownInCents - ReturnCents - Product.PriceInCents;
 
         /// <summary>
         /// Münze wird eingenommen.
@@ -80,7 +81,38 @@ namespace CoffeeSlotMachine.Core.Entities
         /// <param name="coins">Aktueller Zustand des Münzdepots</param>
         public void FinishPayment(IEnumerable<Coin> coins)
         {
-            throw new NotImplementedException();
+            foreach (var v in ThrownInCoinValues
+                                   .Split(";")
+                                   .Select(s => Convert.ToInt32(s))
+                                   .GroupBy(s => s))
+            {
+                coins
+                    .First(c => c.CoinValue == v.Key)
+                    .Amount += v.Count();
+            }
+            coins = coins.OrderByDescending(c => c.CoinValue);
+            int sum = ThrownInCents - Product.PriceInCents;
+            foreach (Coin c in coins)
+            {
+                for (int i = 0; i < c.Amount && sum != 0; i++)
+                {
+                    if (c.CoinValue <= sum)
+                    {
+                        ReturnCoinValues += c.CoinValue + ";";
+                        sum -= c.CoinValue;
+                        c.Amount--;
+                    }
+                }
+            }
+
+            if (ReturnCoinValues != null)
+            {
+                ReturnCoinValues = ReturnCoinValues.Substring(0, ReturnCoinValues.Length - 1);
+            }
+            else
+            {
+                ReturnCoinValues = "0";
+            }
         }
     }
 }

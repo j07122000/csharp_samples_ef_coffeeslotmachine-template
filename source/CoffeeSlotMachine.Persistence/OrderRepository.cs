@@ -24,6 +24,7 @@ namespace CoffeeSlotMachine.Persistence
 
         public Order AddOrder(Product p)
         {
+
             Order o = new Order
             {
                 Product = p

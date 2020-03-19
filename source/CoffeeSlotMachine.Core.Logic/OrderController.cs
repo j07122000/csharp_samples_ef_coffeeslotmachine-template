@@ -81,7 +81,16 @@ namespace CoffeeSlotMachine.Core.Logic
         /// <returns></returns>
         public string GetCoinDepotString()
         {
-            throw new NotImplementedException();
+            List<string> sList = GetCoinDepot()
+             .Select(c => c.Amount + "*" + c.CoinValue + " + ")
+             .ToList();
+
+            string sum = "";
+            foreach (string s in sList)
+            {
+                sum += s;
+            }
+            return sum.Substring(0, sum.Length - 3);
         }
 
         /// <summary>
